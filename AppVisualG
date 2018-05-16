@@ -1,0 +1,106 @@
+#include <stdio.h>
+#include <string.h>
+#include <conio.h>
+#include <dos.h>
+#include <stdlib.h>
+#include <windows.h>
+#include <time.h>
+#include <ctype.h>
+#include <locale.h>
+#include <math.h>
+
+void cores(int ForgC, int BackC);
+void gotoxy(int x, int y);
+void textcolor(int newcolor);
+void imp_autor();
+
+// -------------- AQUI COMEÇA NOSSO PROGRAMA PROPRIAMENTE DITO -----------------
+
+main()
+{
+   imp_autor();  // Rotina padrao para imprimir o nome do autor.
+
+int n=10;
+int vet[n]; 
+int i;
+int media=0;
+int soma=0;
+
+
+srand (time(NULL));
+
+for (i=0;i<n;i++)
+{
+	vet[i]= rand()%100+1;
+	printf ("%4d",vet[i]);
+	soma= soma + vet[i];
+}
+
+	
+printf ("\n");
+
+media=soma/10;
+printf (" Essa é a média dos numeros aleatorios %4d",media);	
+
+
+printf ("\n");
+
+for (i=0;i<n;i++)
+{
+	if (vet[i]>media)
+	
+	printf ("\nEsse número esta acima da media: %4d",vet[i]);
+
+}
+
+printf ("\n");
+
+for (i=0;i<n;i++)
+{
+	if (vet[i]<media)
+	
+	printf ("\nEsse número esta  abaixo da media: %4d",vet[i]);
+
+}
+
+
+
+   getch(); // força uma parada do programa no final da seua execução.
+}
+
+// Esta função mostra o nome do programador no início da execução
+void imp_autor(){
+  setlocale(LC_ALL, "Portuguese");
+  gotoxy(27,12);
+  textcolor(10);
+  printf("Rickson Santos");
+  Sleep(1500);
+  system("cls"); // comando para limpar o conteúdo da tela.
+
+}
+// esta rotina é só para a cor do texto
+void textcolor(int newcolor){
+   CONSOLE_SCREEN_BUFFER_INFO csbi;
+   GetConsoleScreenBufferInfo(GetStdHandle(STD_OUTPUT_HANDLE), &csbi);
+   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE),
+     (csbi.wAttributes & 0xf0) | newcolor);
+}
+// rotina para podermos utilizar cor do texto (textcolor)
+// e cor do fundo (textbackground) em um único comando.
+// para chama-la de dentro do programa use  cores(x,y);
+// onde x = numero da cor do texto  (textcolor)
+//      y = numero da cor do fundo  (textbackground)
+void cores(int ForgC, int BackC){   // para chamar
+     WORD wColor = ((BackC & 0x0F) << 4) + (ForgC & 0x0F);;
+     SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), wColor);
+     return;
+}
+
+// rotina para podermos utilizar o comando gotoxy(Coluna,Linha)
+// sem precisar carregar bibliotecas não disponíveis na Feevale.
+void gotoxy(int x, int y) {
+  COORD c;
+  c.X = x - 1;
+  c.Y = y - 1;
+  SetConsoleCursorPosition (GetStdHandle(STD_OUTPUT_HANDLE), c);
+}
